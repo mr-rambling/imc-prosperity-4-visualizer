@@ -44,7 +44,7 @@ function getColumnValues(columns: string[], indices: number[]): number[] {
 }
 
 function getActivityLogs(logLines: string[]): ActivityLogRow[] {
-  const headerIndex = logLines.indexOf('Activities log:');
+  const headerIndex = logLines.indexOf('\"activitiesLog\":');
   if (headerIndex === -1) {
     return [];
   }
@@ -192,7 +192,7 @@ function decompressDataRow(compressed: CompressedAlgorithmDataRow, sandboxLogs: 
 }
 
 function getAlgorithmData(logLines: string[]): AlgorithmDataRow[] {
-  const headerIndex = logLines.indexOf('Sandbox logs:');
+  const headerIndex = logLines.indexOf('\"logs\":[');
   if (headerIndex === -1) {
     return [];
   }
@@ -200,8 +200,8 @@ function getAlgorithmData(logLines: string[]): AlgorithmDataRow[] {
   const rows: AlgorithmDataRow[] = [];
   let nextSandboxLogs = '';
 
-  const sandboxLogPrefix = '  "sandboxLog": ';
-  const lambdaLogPrefix = '  "lambdaLog": ';
+  const sandboxLogPrefix = '  "sandboxLog":';
+  const lambdaLogPrefix = '  "lambdaLog":';
 
   for (let i = headerIndex + 1; i < logLines.length; i++) {
     const line = logLines[i];
@@ -222,7 +222,7 @@ function getAlgorithmData(logLines: string[]): AlgorithmDataRow[] {
       continue;
     }
 
-    if (!line.startsWith(lambdaLogPrefix) || line === '  "lambdaLog": "",') {
+    if (!line.startsWith(lambdaLogPrefix) || line === '  "lambdaLog":"",') {
       continue;
     }
 
